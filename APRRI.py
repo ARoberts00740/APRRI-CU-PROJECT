@@ -117,11 +117,8 @@ if __name__ == "__main__":
             speak(results)
 
         elif 'play music' in sentence:
-            music_dir = 'D:\\Non Critical\\songs\\Favorite Songs2'
-            songs = os.listdir(music_dir)
-            print(songs)    
-            os.startfile(os.path.join(music_dir, songs[0]))
+            ...
 
-        elif 'the time' in sentence:
+        elif 'Time' in sentence:
             strTime = datetime.datetime.now().strftime("%H:%M:%S")    
-            speak(f"Sir, the time is {strTime}")
+            speak(f"The time is {strTime}")
