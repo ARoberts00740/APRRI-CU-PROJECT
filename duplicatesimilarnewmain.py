@@ -11,7 +11,7 @@ import imagehash
 import os
 import glob
 import numpy as np
-
+location=''
 class DuplicateRemover:
     def __init__(self,dirname,hash_size = 8):
         self.dirname = dirname
@@ -73,6 +73,8 @@ def duplicates():
     root = Tk()
     root.withdraw()
     folder_selected = filedialog.askdirectory()
+    global location
+    location=folder_selected
     dr = DuplicateRemover(folder_selected)
     dr.find_duplicates()
 def similar():
