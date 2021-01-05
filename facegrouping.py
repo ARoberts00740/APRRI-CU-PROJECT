@@ -14,13 +14,15 @@ persons_list = []
 index = {}
 potraits = {}
 faces_in_image = {}
-
+location=''
 def select():
     root = Tk()
     root.withdraw()
     folder_selected = filedialog.askdirectory()
     global dir_path
     dir_path = folder_selected+'/'
+    global location
+    location=folder_selected
 
 def sort(file_name):
     '''
