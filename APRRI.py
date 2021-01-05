@@ -114,162 +114,167 @@ def start():
     error=-1
     print("\n \'help\' for instructions")
     while 1:
-        if(mode=='t'or mode=='T'):
-            sentence = input("Type Here: ")
-        elif(mode=='v'or mode=='V'):
-            sentence = inp().lower()
-        sentence=sentence.lower()
-        if 'open' in sentence:
-            root = Tk()
-            root.withdraw()
-            filename = askopenfilename()
-            os.startfile(filename)
+        try:
+            if(mode=='t'or mode=='T'):
+                sentence = input("\nType Here: ")
+            elif(mode=='v'or mode=='V'):
+                sentence = inp().lower()
+            sentence=sentence.lower()
+            if 'open' in sentence:
+                root = Tk()
+                root.withdraw()
+                filename = askopenfilename()
+                os.startfile(filename)
+                
+            elif 'change' in sentence and 'voice' in sentence:
+                if(mode=='T' or mode=='t'):
+                    print("Loaded available voices. Proceeding now")
+                voice_choose()
+                
+            elif 'change' in sentence and 'mode' in sentence:
+                mode_choose()
+                
+            elif 'sort' in sentence and ('person' in sentence or 'face' in sentence):
+                print("Let's organise your photos by faces")
+                speak("Let's organise your photos by faces")
+                slowPrint("Please choose a folder\n")
+                speak("Please choose a folder")
+                fg.select()
+                speak("Working now")
+                fg.person_sort()
+                print("\nALL DONE! ^_^ Take a look")
+                speak("All Done! Take a look")
+                os.startfile(fg.location)
+                
+            elif 'selfie' in sentence or 'solo' in sentence:
+                print("Lets create a separate folder for your solo stills")
+                speak("Lets create a separate folder for your solo stills")
+                slowPrint("Please choose a folder\n")
+                speak("Please choose a folder that has images")
+                fg.select()
+                slowPrint("Working Now...")
+                speak("Working now")
+                fg.face_find()
+                print("\nALL DONE! ^_^")
+                speak("All Done! Take a look")
+                os.startfile(fg.location)
+                
+            elif 'similar' in sentence:
+                print("I will now analyze images based on their similarity to the image you select")
+                print("Please choose the folder where the image is located and then the image\n")
+                speak("Please choose the folder where the image is located and then the image")
+                dsm.similar()
+                print("\nALL DONE! Please see the analysis results above")
+                speak("All Done! Please see the analysis results above")
+                
+            elif 'duplicate' in sentence:
+                print("I will now find and delete duplicate images")
+                speak("Let's recover some storage")
+                slowPrint("Please choose a folder\n")
+                speak("Please choose a folder")
+                dsm.duplicates()
+                print("\nALL DONE! ^_^ \nTake a look")
+                speak("All Done! Take a look")
+                os.startfile(dsm.location)
             
-        elif 'change' in sentence and 'voice' in sentence:
-            if(mode=='T' or mode=='t'):
-                print("Loaded available voices. Proceeding now")
-            voice_choose()
-            
-        elif 'change' in sentence and 'mode' in sentence:
-            mode_choose()
-            
-        elif 'sort' in sentence and ('person' in sentence or 'face' in sentence):
-            print("Let's organise your photos by faces")
-            speak("Let's organise your photos by faces")
-            slowPrint("Please choose a folder\n")
-            speak("Please choose a folder")
-            fg.select()
-            speak("Working now")
-            fg.person_sort()
-            print("\nALL DONE! ^_^ Take a look")
-            speak("All Done! Take a look")
-            os.startfile(fg.location)
-            
-        elif 'selfie' in sentence or 'solo' in sentence:
-            print("Lets create a separate folder for your solo stills")
-            speak("Lets create a separate folder for your solo stills")
-            slowPrint("Please choose a folder\n")
-            speak("Please choose a folder that has images")
-            fg.select()
-            slowPrint("Working Now...")
-            speak("Working now")
-            fg.face_find()
-            print("\nALL DONE! ^_^")
-            speak("All Done! Take a look")
-            os.startfile(fg.location)
-            
-        elif 'similar' in sentence:
-            print("I will now analyze images based on their similarity to the image you select")
-            print("Please choose the folder where the image is located and then the image\n")
-            speak("Please choose the folder where the image is located and then the image")
-            dsm.similar()
-            print("\nALL DONE! Please see the analysis results above")
-            speak("All Done! Please see the analysis results above")
-            
-        elif 'duplicate' in sentence:
-            print("I will now find and delete duplicate images")
-            speak("Let's recover some storage")
-            slowPrint("Please choose a folder\n")
-            speak("Please choose a folder")
-            dsm.duplicates()
-            print("\nALL DONE! ^_^ \nTake a look")
-            speak("All Done! Take a look")
-            os.startfile(dsm.location)
-        
-        elif 'month' in sentence and 'sort' in sentence:
-            print("I will now organise your photos according to the month and year in which they were taken")
-            slowPrint("Please choose a folder\n")
-            speak("Please choose a folder")
-            dom.monthOrganise()
-            print("ALL DONE! ^_^")
-            speak("All Done! Take a look")
-            os.startfile(dom.location)
-            
-        elif 'year' in sentence and 'sort' in sentence:
-            print("I will now organise your photos according to the year in which they were taken")
-            slowPrint("Please choose a folder\n")
-            speak("Please choose a folder")
-            dom.yearOrganise()
-            print("ALL DONE! ^_^")
-            speak("All Done! Take a look")
-            os.startfile(dom.location)
-            
-        elif (sentence=='exit') or 'stop' in sentence or ('bye' in sentence):
-            bye()
-            break;
-            
-        elif 'wikipedia' in sentence:
-            speak('Searching Wikipedia...')
-            sentence = sentence.replace("wikipedia", "")
-            sentence = sentence.replace("search", "")
-            results = wikipedia.summary(sentence, sentences=2)
-            speak("Wikipedia says")
-            print(results)
-            speak(results)
-
-        elif 'music' in sentence or 'youtube' in sentence:
-            slowPrint("Lets get  grooving")
-            speak("Lets get grooving")
-            searcher=input("Enter search term: ")
-            c=-1
-            videosSearch = VideosSearch(searcher, limit = 2)
-            res=(videosSearch.result()['result'])
-            link=[]
-            print("Choose a video:\n")
-            speak("Choose a song")
-            for i in res:
-                print(c+2,"."+i['title'])
-                c+=1
-                link.append('https://youtu.be/'+i['id'])
-                print(link[c])
-            play=int(input())
-            os.startfile(link[play])
-            
-        elif 'photo' in sentence or 'image' in sentence:
-            can_do_photos()
-
-        elif 'the time' in sentence:
-            strTime = datetime.datetime.now().strftime("%H:%M:%S")    
-            speak(f"The time is {strTime}")
-            
-        elif 'help' in sentence:
-            can_do()
-            
-        elif 'hello' in sentence or 'hi' in sentence or 'hey' in sentence:
-            slowPrint("Hey there!")
-            speak("Hey there")
-            
-        elif 'what\'s up' in sentence or 'whatsup' in sentence or 'sup' in sentence or 'whassup' in sentence or 'how r u' in sentence or 'how are you' in sentence:
-            slowPrint("I am doing well!\n")
-            speak("I am doing well")
-            slowPrint("And you?")
-            speak("and you?")
-            hru=1
-            
-        elif hru==1 and ('good' in sentence or 'fine' in sentence):
-            slowPrint("Glad to know!")
-            speak("Glad to know")
-            
-        elif 'what' in sentence and ' doing' in sentence:
-            slowPrint("Well, I want to organise more photos")
-            speak("I am bored, I want to organise more photos")
+            elif 'month' in sentence and 'sort' in sentence:
+                print("I will now organise your photos according to the month and year in which they were taken")
+                slowPrint("Please choose a folder\n")
+                speak("Please choose a folder")
+                dom.monthOrganise()
+                print("ALL DONE! ^_^")
+                speak("All Done! Take a look")
+                os.startfile(dom.location)
+                
+            elif 'year' in sentence and 'sort' in sentence:
+                print("I will now organise your photos according to the year in which they were taken")
+                slowPrint("Please choose a folder\n")
+                speak("Please choose a folder")
+                dom.yearOrganise()
+                print("ALL DONE! ^_^")
+                speak("All Done! Take a look")
+                os.startfile(dom.location)
+                
+            elif (sentence=='exit') or 'stop' in sentence or ('bye' in sentence):
+                bye()
+                break;
+                
+            elif 'wikipedia' in sentence:
+                speak('Searching Wikipedia...')
+                sentence = sentence.replace("wikipedia", "")
+                sentence = sentence.replace("search", "")
+                results = wikipedia.summary(sentence, sentences=2)
+                speak("Wikipedia says")
+                print(results)
+                speak(results)
     
-        elif 'good' in sentence and ('afternoon' in sentence or 'morning' in sentence or 'night' in sentence):
-            greet()
-            
-        elif(sentence=='none' or sentence==''):
-            continue
-        
-        elif sentence!="":
-            error+=1
-            if(error<1):
-                print("Sorry, I don't know how to respond to that. Please try something else...")
-                speak("Sorry, I don't know how to respond to that. Please try something else...")
-            if(error==1):
-                print("I am still learning, please try another command\nType \'help\' for the list of commands\n")
-                speak("I am still learning, please try another command")
-            if(error>1):
-                print("I guess this will help:")
+            elif 'music' in sentence or 'youtube' in sentence:
+                slowPrint("Lets get  grooving")
+                speak("Lets get grooving")
+                searcher=input("Enter search term: ")
+                c=-1
+                videosSearch = VideosSearch(searcher, limit = 2)
+                res=(videosSearch.result()['result'])
+                link=[]
+                print("Choose a video:\n")
+                speak("Choose a song")
+                for i in res:
+                    print(c+2,"."+i['title'])
+                    c+=1
+                    link.append('https://youtu.be/'+i['id'])
+                    print(link[c])
+                play=int(input())
+                os.startfile(link[play])
+                
+            elif 'photo' in sentence or 'image' in sentence:
+                can_do_photos()
+    
+            elif 'the time' in sentence:
+                strTime = datetime.datetime.now().strftime("%H:%M:%S")    
+                speak(f"The time is {strTime}")
+                
+            elif 'help' in sentence:
                 can_do()
-                speak("I guess this will help")
-        #elif 'sim' in sentence: os.system('python similarity.py -f C:/Users/ASUS/Desktop/TESTF/TESTF/')
+                
+            elif 'hello' in sentence or 'hi' in sentence or 'hey' in sentence:
+                slowPrint("Hey there!")
+                speak("Hey there")
+                
+            elif 'what\'s up' in sentence or 'whatsup' in sentence or 'sup' in sentence or 'whassup' in sentence or 'how r u' in sentence or 'how are you' in sentence:
+                slowPrint("I am doing well!\n")
+                speak("I am doing well")
+                slowPrint("And you?")
+                speak("and you?")
+                hru=1
+                
+            elif hru==1 and ('good' in sentence or 'fine' in sentence):
+                slowPrint("Glad to know!")
+                speak("Glad to know")
+                
+            elif 'what' in sentence and ' doing' in sentence:
+                slowPrint("Well, I want to organise more photos")
+                speak("I am bored, I want to organise more photos")
+        
+            elif 'good' in sentence and ('afternoon' in sentence or 'morning' in sentence or 'night' in sentence):
+                greet()
+                
+            elif(sentence=='none' or sentence==''):
+                continue
+            
+            elif sentence!="":
+                error+=1
+                if(error<1):
+                    print("Sorry, I don't know how to respond to that. Please try something else...")
+                    speak("Sorry, I don't know how to respond to that. Please try something else...")
+                if(error==1):
+                    print("I am still learning, please try another command\nType \'help\' for the list of commands\n")
+                    speak("I am still learning, please try another command")
+                if(error>1):
+                    print("I guess this will help:")
+                    can_do()
+                    speak("I guess this will help")
+            #elif 'sim' in sentence: os.system('python similarity.py -f C:/Users/ASUS/Desktop/TESTF/TESTF/')
+        except:
+            print("An unknown error occured with image Hash/EXIF info")
+            speak("Sorry about that, I am having issues processing that")
+            continue
