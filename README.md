@@ -1,2 +1,2 @@
-# ChandigarhUniversity
+# APRRI
 to be updated...
